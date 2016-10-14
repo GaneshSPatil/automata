@@ -1,7 +1,7 @@
 import automata.generator.DFAGenrator;
 import automata.machine.Machine;
 import automata.generator.MachineGenerator;
-import automata.generator.NFAGenrator;
+import automata.generator.NFAGenerator;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
@@ -33,7 +33,7 @@ public class TestDataParser {
     public void parseData() throws IOException {
         HashMap<String, MachineGenerator> machineGeneratorMapper = new HashMap<String, MachineGenerator>();
         machineGeneratorMapper.put("dfa", new DFAGenrator());
-        machineGeneratorMapper.put("nfa", new NFAGenrator());
+        machineGeneratorMapper.put("nfa", new NFAGenerator());
 
         String fileName = "src/main/resources/examples.json";
         String jsonContent = readFile(fileName);
