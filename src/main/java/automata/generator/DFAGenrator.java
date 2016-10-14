@@ -29,11 +29,11 @@ public class DFAGenrator extends GenerationHelper implements MachineGenerator {
         Transitions transitions = new Transitions();
         for (String state : delta.keySet()) {
             HashMap<String, String> values = delta.get(state);
+            HashMap<Alphabet, State> transitInfo = new HashMap<Alphabet, State>();
             for (String alphabet : values.keySet()) {
-                HashMap<Alphabet, State> transitInfo = new HashMap<Alphabet, State>();
                 transitInfo.put(new Alphabet(alphabet), new State(values.get(alphabet)));
-                transitions.put(new State(state), transitInfo);
             }
+            transitions.put(new State(state), transitInfo);
         }
         return transitions;
     }

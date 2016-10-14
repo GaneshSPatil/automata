@@ -21,10 +21,14 @@ public class DFATest {
         alphabets.add(new Alphabet("0"));
 
         Transitions transitions = new Transitions();
-        transitions.put(new State("q1"), new HashMap<Alphabet, State>(){{ put(new Alphabet("0"), new State("q2"));}});
-        transitions.put(new State("q1"), new HashMap<Alphabet, State>(){{ put(new Alphabet("1"), new State("q1"));}});
-        transitions.put(new State("q2"), new HashMap<Alphabet, State>(){{ put(new Alphabet("0"), new State("q2"));}});
-        transitions.put(new State("q2"), new HashMap<Alphabet, State>(){{ put(new Alphabet("1"), new State("q1"));}});
+        transitions.put(new State("q1"), new HashMap<Alphabet, State>(){
+            { put(new Alphabet("0"), new State("q2"));}
+            { put(new Alphabet("1"), new State("q1"));}
+        });
+        transitions.put(new State("q2"), new HashMap<Alphabet, State>(){
+            { put(new Alphabet("0"), new State("q2"));}
+            { put(new Alphabet("1"), new State("q1"));}
+        });
 
         State initialState = new State("q1");
 

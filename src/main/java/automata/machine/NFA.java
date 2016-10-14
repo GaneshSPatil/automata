@@ -2,7 +2,6 @@ package automata.machine;
 
 import automata.entity.*;
 import automata.entity.nfa.Transitions;
-import automata.machine.Machine;
 
 public class NFA implements Machine {
     private final States states;
@@ -32,7 +31,7 @@ public class NFA implements Machine {
             }
             currentStates = bufferedStates;
         }
-        return finalStates.containsAny(currentStates);
+        return finalStates.containsAnyOf(currentStates);
     }
 
     @Override
