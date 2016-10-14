@@ -1,6 +1,7 @@
 package automata.machine;
 
 import automata.entity.*;
+import automata.entity.dfa.Transitions;
 
 public class DFA implements Machine {
     private final States states;

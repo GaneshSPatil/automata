@@ -1,9 +1,7 @@
 package automata.machine;
 
-import automata.entity.Alphabets;
-import automata.entity.State;
-import automata.entity.States;
-import automata.entity.Transitions;
+import automata.entity.*;
+import automata.entity.nfa.Transitions;
 import automata.machine.Machine;
 
 public class NFA implements Machine {
@@ -22,7 +20,19 @@ public class NFA implements Machine {
     }
 
     public boolean canAccept(String inputString) {
-        return false;
+        States currentStates = new States();
+        currentStates.add(initialState);
+
+        Alphabets alphabets = Alphabets.fromString(inputString);
+
+        for (Alphabet alphabet : alphabets) {
+            States bufferedStates = new States();
+            for (State state : currentStates) {
+                bufferedStates.addAll(transitions.transit(state, alphabet));
+            }
+            currentStates = bufferedStates;
+        }
+        return finalStates.containsAny(currentStates);
     }
 
     @Override

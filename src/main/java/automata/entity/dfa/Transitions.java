@@ -1,4 +1,7 @@
-package automata.entity;
+package automata.entity.dfa;
+
+import automata.entity.Alphabet;
+import automata.entity.State;
 
 import java.util.HashMap;
 

@@ -1,6 +1,7 @@
 package automata.generator;
 
 import automata.entity.*;
+import automata.entity.dfa.Transitions;
 import automata.machine.DFA;
 import automata.machine.Machine;
 import org.hamcrest.CoreMatchers;
@@ -20,7 +21,7 @@ public class DFAGenratorTest {
         states.add("q2");
         ArrayList<String> alphabets = new ArrayList<String>();
         alphabets.add("0");
-        HashMap<String, HashMap<String, String>> delta = new HashMap<String, HashMap<String, String>>();
+        HashMap<String, HashMap> delta = new HashMap<String, HashMap>();
         HashMap<String, String> transition = new HashMap<String, String>();
         transition.put("0", "q2");
         delta.put("q1", transition);

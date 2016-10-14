@@ -1,12 +1,14 @@
 package automata.generator;
 
 import automata.entity.*;
+import automata.entity.nfa.Transitions;
 import automata.machine.Machine;
 import automata.machine.NFA;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -26,7 +28,7 @@ public class NFAGeneratorTest {
         alphabets.add("0");
         alphabets.add("1");
 
-        HashMap<String, HashMap<String, String>> delta = new HashMap<String, HashMap<String, String>>();
+        HashMap<String, HashMap> delta = new HashMap<String, HashMap>();
 
         String startState = "q1";
 

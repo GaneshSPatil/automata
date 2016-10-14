@@ -1,6 +1,7 @@
 package automata.generator;
 
 import automata.entity.*;
+import automata.entity.dfa.Transitions;
 import automata.machine.DFA;
 import automata.machine.Machine;
 
@@ -25,16 +26,4 @@ public class GenerationHelper {
         return allAlphabets;
     }
 
-    Transitions getTransitions(HashMap<String, HashMap<String, String>> delta) {
-        Transitions transitions = new Transitions();
-        for (String state : delta.keySet()) {
-            HashMap<String, String> values = delta.get(state);
-            for (String alphabet : values.keySet()) {
-                HashMap<Alphabet, State> transitInfo = new HashMap<Alphabet, State>();
-                transitInfo.put(new Alphabet(alphabet), new State(values.get(alphabet)));
-                transitions.put(new State(state), transitInfo);
-            }
-        }
-        return transitions;
-    }
 }

@@ -45,15 +45,15 @@ public class TestDataParser {
             ArrayList<String> alphabets = (ArrayList<String>) tuple.get("alphabets");
             ArrayList<String> finalStates = (ArrayList<String>) tuple.get("final-states");
             String startState = (String) tuple.get("start-state");
-            HashMap<String , HashMap<String, String >> delta = getDelta((LinkedTreeMap<String, LinkedTreeMap<String, String>>)tuple.get("delta"));
+            HashMap<String , HashMap> delta = getDelta((LinkedTreeMap<String, LinkedTreeMap<String, String>>)tuple.get("delta"));
             allMachines.add(machineGeneratorMapper.get(parsedJSON.get("type")).generate(states, alphabets, delta, startState, finalStates));
             allPassCases.add((ArrayList<String>) parsedJSON.get("pass-cases"));
             allFailedCases.add((ArrayList<String>) parsedJSON.get("fail-cases"));
         }
     }
 
-    private static HashMap<String, HashMap<String, String>> getDelta(LinkedTreeMap<String, LinkedTreeMap<String, String>> deltaInString) {
-        HashMap<String, HashMap<String, String>> delta = new HashMap<String, HashMap<String, String>>();
+    private static HashMap<String, HashMap> getDelta(LinkedTreeMap<String, LinkedTreeMap<String, String>> deltaInString) {
+        HashMap<String, HashMap> delta = new HashMap<String, HashMap>();
         for (String key : deltaInString.keySet()) {
             LinkedTreeMap<String, String> valuesInString = deltaInString.get(key);
             HashMap<String, String> transition = new HashMap<String, String>();

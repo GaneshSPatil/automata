@@ -1,6 +1,7 @@
 package automata.machine;
 
 import automata.entity.*;
+import automata.entity.dfa.Transitions;
 import org.junit.Test;
 
 import java.util.HashMap;
