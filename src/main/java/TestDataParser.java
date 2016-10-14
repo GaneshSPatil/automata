@@ -1,7 +1,7 @@
-import automata.DFAGenrator;
-import automata.Machine;
-import automata.MachineGenerator;
-import automata.NFAGenrator;
+import automata.generator.DFAGenrator;
+import automata.machine.Machine;
+import automata.generator.MachineGenerator;
+import automata.generator.NFAGenrator;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;

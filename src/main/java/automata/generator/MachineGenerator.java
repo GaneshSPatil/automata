@@ -1,4 +1,6 @@
-package automata;
+package automata.generator;
+
+import automata.machine.Machine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
