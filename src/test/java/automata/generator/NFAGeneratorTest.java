@@ -29,6 +29,16 @@ public class NFAGeneratorTest {
         alphabets.add("1");
 
         HashMap<String, HashMap> delta = new HashMap<String, HashMap>();
+        delta.put("q1", new HashMap<String, HashSet<String>>(){{
+            put("*", new HashSet<String>(){{
+                add("q2");
+                add("q3");
+            }});
+        }});
+        delta.put("q2", new HashMap<String, HashSet<String>>(){{put("0", new HashSet<String>(){{add("q4");}});}});
+        delta.put("q3", new HashMap<String, HashSet<String>>(){{put("1", new HashSet<String>(){{add("q5");}});}});
+        delta.put("q4", new HashMap<String, HashSet<String>>(){{put("0", new HashSet<String>(){{add("q4");}});}});
+        delta.put("q5", new HashMap<String, HashSet<String>>(){{put("1", new HashSet<String>(){{add("q5");}});}});
 
         String startState = "q1";
 
@@ -51,6 +61,15 @@ public class NFAGeneratorTest {
         allAlphabets.add(new Alphabet("1"));
 
         Transitions transitions = new Transitions();
+        transitions.put(new State("q1"), new HashMap<Alphabet, States>(){
+            {put(new Alphabet("0"), new States(){{add(new State("q4"));}});}
+            {put(new Alphabet("1"), new States(){{add(new State("q5"));}});}
+        });
+
+        transitions.put(new State("q2"), new HashMap<Alphabet, States>(){{put(new Alphabet("0"), new States(){{add(new State("q4"));}});}});
+        transitions.put(new State("q3"), new HashMap<Alphabet, States>(){{put(new Alphabet("1"), new States(){{add(new State("q5"));}});}});
+        transitions.put(new State("q4"), new HashMap<Alphabet, States>(){{put(new Alphabet("0"), new States(){{add(new State("q4"));}});}});
+        transitions.put(new State("q5"), new HashMap<Alphabet, States>(){{put(new Alphabet("1"), new States(){{add(new State("q5"));}});}});
 
         State initialState = new State("q1");
 
