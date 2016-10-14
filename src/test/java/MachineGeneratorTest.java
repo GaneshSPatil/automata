@@ -1,15 +1,20 @@
 import automata.Machine;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 public class MachineGeneratorTest {
+    @Rule
+    public ErrorCollector collector = new ErrorCollector();
+
     @Test
     public void shouldRunAllTests() throws Exception {
         TestDataParser testDataParser = new TestDataParser();
+        testDataParser.parseData();
         ArrayList<Machine> allMachines = testDataParser.getAllMachines();
         ArrayList<ArrayList<String>> allPassCases = testDataParser.getAllPassCasesInSequence();
         ArrayList<ArrayList<String>> allFailCases = testDataParser.getAllFailCasesInSequence();
@@ -19,10 +24,10 @@ public class MachineGeneratorTest {
             ArrayList<String> passCases = allPassCases.get(i);
             ArrayList<String> failedCases = allFailCases.get(i);
             for (String validString : passCases) {
-                assertTrue(machine.canAccept(validString));
+                collector.checkThat(machine.canAccept(validString), equalTo(true));
             }
             for (String invalidString : failedCases) {
-                assertFalse(machine.canAccept(invalidString));
+                collector.checkThat(machine.canAccept(invalidString), equalTo(false));
             }
         }
     }

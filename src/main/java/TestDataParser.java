@@ -1,5 +1,8 @@
-import automata.*;
-import com.google.gson.*;
+import automata.DFAGenrator;
+import automata.Machine;
+import automata.MachineGenerator;
+import automata.NFAGenrator;
+import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
@@ -7,15 +10,27 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.sql.Wrapper;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static java.lang.System.lineSeparator;
 
-public class ParseJSON {
-    public static void main(String[] args) throws IOException {
+public class TestDataParser {
+    private final ArrayList<Machine> allMachines;
+    private final ArrayList<ArrayList<String>> allPassCases;
+    private final ArrayList<ArrayList<String>> allFailedCases;
+
+    public ArrayList<Machine> getAllMachines() {
+        return allMachines;
+    }
+
+    public TestDataParser() {
+        this.allMachines = new ArrayList<Machine>();
+        this.allPassCases = new ArrayList<ArrayList<String>>();
+        this.allFailedCases = new ArrayList<ArrayList<String>>();
+    }
+
+    public void parseData() throws IOException {
         HashMap<String, MachineGenerator> machineGeneratorMapper = new HashMap<String, MachineGenerator>();
         machineGeneratorMapper.put("dfa", new DFAGenrator());
         machineGeneratorMapper.put("nfa", new NFAGenrator());
@@ -31,9 +46,9 @@ public class ParseJSON {
             ArrayList<String> finalStates = (ArrayList<String>) tuple.get("final-states");
             String startState = (String) tuple.get("start-state");
             HashMap<String , HashMap<String, String >> delta = getDelta((LinkedTreeMap<String, LinkedTreeMap<String, String>>)tuple.get("delta"));
-            Machine dfa = machineGeneratorMapper.get(parsedJSON.get("type")).generate(states, alphabets, delta, startState, finalStates);
-
-            System.out.println(parsedJSON);
+            allMachines.add(machineGeneratorMapper.get(parsedJSON.get("type")).generate(states, alphabets, delta, startState, finalStates));
+            allPassCases.add((ArrayList<String>) parsedJSON.get("pass-cases"));
+            allFailedCases.add((ArrayList<String>) parsedJSON.get("fail-cases"));
         }
     }
 
@@ -65,5 +80,13 @@ public class ParseJSON {
         } finally {
             br.close();
         }
+    }
+
+    public ArrayList<ArrayList<String>> getAllPassCasesInSequence() {
+        return this.allPassCases;
+    }
+
+    public ArrayList<ArrayList<String>> getAllFailCasesInSequence() {
+        return allFailedCases;
     }
 }

@@ -1,5 +1,5 @@
 package automata;
 
 public interface Machine {
-//    boolean canAccept();
+    boolean canAccept(String inputString);
 }
