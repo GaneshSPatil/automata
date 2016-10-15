@@ -1,8 +1,8 @@
 package automata.entity;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
-public class States extends HashSet<State>{
+public class States extends LinkedHashSet<State>{
 
     public boolean containsAnyOf(States currentStates) {
         for (State currentState : currentStates) {

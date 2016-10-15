@@ -41,5 +41,9 @@ public class DFATest {
         assertTrue(dfa.canAccept("00"));
         assertTrue(dfa.canAccept("10"));
         assertTrue(dfa.canAccept("1010"));
+
+        assertFalse(dfa.canAccept("1"));
+        assertFalse(dfa.canAccept("01"));
+        assertFalse(dfa.canAccept("0000001"));
     }
 }

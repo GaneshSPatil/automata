@@ -3,6 +3,8 @@ package automata.machine;
 import automata.entity.*;
 import automata.entity.nfa.Transitions;
 
+import java.util.Collection;
+
 public class NFA implements Machine {
     private final States states;
     private final Alphabets alphabets;

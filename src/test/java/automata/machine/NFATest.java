@@ -4,6 +4,8 @@ import automata.entity.*;
 import automata.entity.nfa.Transitions;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertFalse;
@@ -11,7 +13,20 @@ import static org.junit.Assert.assertTrue;
 
 public class NFATest {
     @Test
-    public void shouldAcceptAllStringsContainingEitherOnlyOncesOrZeros() throws Exception {
+    public void shouldAcceptAllStringsContainingEitherOnlyOnesOrZeros() throws Exception {
+        NFA nfa = getOnesAndZerosNfa();
+
+        assertTrue(nfa.canAccept("0"));
+        assertTrue(nfa.canAccept("0000"));
+        assertTrue(nfa.canAccept("1"));
+        assertTrue(nfa.canAccept("11111"));
+
+        assertFalse(nfa.canAccept(""));
+        assertFalse(nfa.canAccept("10"));
+        assertFalse(nfa.canAccept("111110"));
+    }
+
+    private NFA getOnesAndZerosNfa() {
         States states = new States();
         states.add(new State("q1"));
         states.add(new State("q2"));
@@ -42,12 +57,8 @@ public class NFATest {
         finalStates.add(new State("q4"));
         finalStates.add(new State("q5"));
 
-        NFA nfa = new NFA(states, alphabets, transitions, initialState, finalStates);
-
-        assertTrue(nfa.canAccept("0"));
-        assertTrue(nfa.canAccept("0000"));
-        assertTrue(nfa.canAccept("1"));
-        assertTrue(nfa.canAccept("11111"));
-        assertFalse(nfa.canAccept("111110"));
+        return new NFA(states, alphabets, transitions, initialState, finalStates);
     }
+
+
 }

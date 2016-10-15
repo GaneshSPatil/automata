@@ -32,19 +32,19 @@ public class NFAGenerator extends GenerationHelper implements MachineGenerator {
         ArrayList<String> unprocessedTransitions = new ArrayList<String>();
         for (String state : delta.keySet()) {
             HashMap<String, HashSet<String>> values = delta.get(state);
+            HashMap<Alphabet, States> transitInfo = new HashMap<Alphabet, States>();
             for (String alphabet : values.keySet()) {
                 if(alphabet == "*"){
                     unprocessedTransitions.add(state);
                     continue;
                 }
-                HashMap<Alphabet, States> transitInfo = new HashMap<Alphabet, States>();
                 States transitedStates = new States();
                 for (String s : values.get(alphabet)) {
                     transitedStates.add(new State(s));
                 }
                 transitInfo.put(new Alphabet(alphabet), transitedStates);
-                transitions.put(new State(state), transitInfo);
             }
+            transitions.put(new State(state), transitInfo);
         }
 
         for (String state : unprocessedTransitions) {
@@ -53,7 +53,13 @@ public class NFAGenerator extends GenerationHelper implements MachineGenerator {
             for (String transitedState : transitedStates) {
                  values.putAll(transitions.get(new State(transitedState)));
             }
-            transitions.put(new State(state), values);
+            HashMap<Alphabet, States> existingValues = transitions.get(new State(state));
+            if(existingValues == null){
+                transitions.put(new State(state), values);
+            }else{
+                existingValues.putAll(values);
+                transitions.put(new State(state), existingValues);
+            }
         }
 
         return transitions;
