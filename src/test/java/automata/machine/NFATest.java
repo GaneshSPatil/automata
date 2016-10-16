@@ -4,8 +4,6 @@ import automata.entity.*;
 import automata.entity.nfa.Transitions;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertFalse;
@@ -42,14 +40,16 @@ public class NFATest {
         Transitions transitions = new Transitions();
 
         transitions.put(new State("q1"), new HashMap<Alphabet, States>(){
-            {put(new Alphabet("0"), new States(){{add(new State("q4"));}});}
-            {put(new Alphabet("1"), new States(){{add(new State("q5"));}});}
+            {put(new Alphabet("*"), new States(){
+                {add(new State("q2"));}
+                {add(new State("q3"));}
+            });}
         });
 
-        transitions.put(new State("q2"), new HashMap<Alphabet, States>(){{put(new Alphabet("0"), new States(){{add(new State("q4"));}});}});
-        transitions.put(new State("q3"), new HashMap<Alphabet, States>(){{put(new Alphabet("1"), new States(){{add(new State("q5"));}});}});
-        transitions.put(new State("q4"), new HashMap<Alphabet, States>(){{put(new Alphabet("0"), new States(){{add(new State("q4"));}});}});
-        transitions.put(new State("q5"), new HashMap<Alphabet, States>(){{put(new Alphabet("1"), new States(){{add(new State("q5"));}});}});
+        transitions.put(new State("q2"), new HashMap<Alphabet, States>(){{put(new Alphabet("1"), new States(){{add(new State("q4"));}});}});
+        transitions.put(new State("q3"), new HashMap<Alphabet, States>(){{put(new Alphabet("0"), new States(){{add(new State("q5"));}});}});
+        transitions.put(new State("q4"), new HashMap<Alphabet, States>(){{put(new Alphabet("1"), new States(){{add(new State("q4"));}});}});
+        transitions.put(new State("q5"), new HashMap<Alphabet, States>(){{put(new Alphabet("0"), new States(){{add(new State("q5"));}});}});
 
         State initialState = new State("q1");
 
@@ -59,6 +59,5 @@ public class NFATest {
 
         return new NFA(states, alphabets, transitions, initialState, finalStates);
     }
-
 
 }

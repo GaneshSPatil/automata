@@ -1,18 +1,19 @@
 package automata.machine;
 
-import automata.entity.*;
-import automata.entity.nfa.Transitions;
-
-import java.util.Collection;
+import automata.entity.Alphabet;
+import automata.entity.Alphabets;
+import automata.entity.State;
+import automata.entity.States;
 
 public class NFA implements Machine {
+    public static final Alphabet EPHSILON = new Alphabet("*");
     private final States states;
     private final Alphabets alphabets;
-    private final Transitions transitions;
+    private final automata.entity.nfa.Transitions transitions;
     private final State initialState;
     private final States finalStates;
 
-    public NFA(States states, Alphabets alphabets, Transitions transitions, State initialState, States finalStates) {
+    public NFA(States states, Alphabets alphabets, automata.entity.nfa.Transitions transitions, State initialState, States finalStates) {
         this.states = states;
         this.alphabets = alphabets;
         this.transitions = transitions;
@@ -27,6 +28,7 @@ public class NFA implements Machine {
         Alphabets alphabets = Alphabets.fromString(inputString);
 
         for (Alphabet alphabet : alphabets) {
+            currentStates = getEphsilonStates(currentStates);
             States bufferedStates = new States();
             for (State state : currentStates) {
                 bufferedStates.addAll(transitions.transit(state, alphabet));
@@ -34,6 +36,26 @@ public class NFA implements Machine {
             currentStates = bufferedStates;
         }
         return finalStates.containsAnyOf(currentStates);
+    }
+
+    private States getEphsilonStates(States currentStates) {
+        States states = new States();
+        for (State state : currentStates) {
+            if (hasElpsilonTransition(state)) {
+                states.addAll(transitions.transit(state, EPHSILON));
+            }
+            states.add(state);
+        }
+
+        if (currentStates.containsAll(states) && states.containsAll(currentStates)) {
+            return currentStates;
+        } else {
+            return getEphsilonStates(states);
+        }
+    }
+
+    private boolean hasElpsilonTransition(State state) {
+        return transitions.hasEphsilonTransition(state);
     }
 
     @Override

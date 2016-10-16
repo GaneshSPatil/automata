@@ -2,8 +2,6 @@ package automata.generator;
 
 import automata.entity.*;
 import automata.entity.dfa.Transitions;
-import automata.machine.DFA;
-import automata.machine.Machine;
 
 import java.util.ArrayList;
 import java.util.HashMap;

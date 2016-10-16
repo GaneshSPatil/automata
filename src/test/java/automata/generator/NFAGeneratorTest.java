@@ -1,6 +1,9 @@
 package automata.generator;
 
-import automata.entity.*;
+import automata.entity.Alphabet;
+import automata.entity.Alphabets;
+import automata.entity.State;
+import automata.entity.States;
 import automata.entity.nfa.Transitions;
 import automata.machine.Machine;
 import automata.machine.NFA;
@@ -61,9 +64,12 @@ public class NFAGeneratorTest {
         allAlphabets.add(new Alphabet("1"));
 
         Transitions transitions = new Transitions();
+
         transitions.put(new State("q1"), new HashMap<Alphabet, States>(){
-            {put(new Alphabet("0"), new States(){{add(new State("q4"));}});}
-            {put(new Alphabet("1"), new States(){{add(new State("q5"));}});}
+            {put(new Alphabet("*"), new States(){
+                {add(new State("q2"));}
+                {add(new State("q3"));}
+            });}
         });
 
         transitions.put(new State("q2"), new HashMap<Alphabet, States>(){{put(new Alphabet("0"), new States(){{add(new State("q4"));}});}});

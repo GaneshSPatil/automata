@@ -4,7 +4,6 @@ import automata.entity.*;
 import automata.entity.dfa.Transitions;
 import automata.machine.DFA;
 import automata.machine.Machine;
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.util.ArrayList;
