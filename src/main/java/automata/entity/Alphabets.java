@@ -1,5 +1,7 @@
 package automata.entity;
 
+import automata.machine.NFA;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,4 +15,14 @@ public class Alphabets extends ArrayList<Alphabet> {
         }
         return alphabets;
     }
+
+    public Alphabets getAllAlphabetsForDFA(){
+        Alphabets alphabets = new Alphabets();
+        for (Alphabet alphabet : this) {
+            if(!alphabet.equals(NFA.EPHSILON)){
+                alphabets.add(alphabet);
+            }
+        }
+        return alphabets;
+    };
 }

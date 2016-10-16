@@ -26,4 +26,8 @@ public class Alphabet {
     public int hashCode() {
         return (int) alphabet;
     }
+
+    public String getValue() {
+        return String.valueOf(alphabet);
+    }
 }

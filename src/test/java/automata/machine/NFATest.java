@@ -24,6 +24,57 @@ public class NFATest {
         assertFalse(nfa.canAccept("111110"));
     }
 
+    @Test
+    public void shouldCreateEquivalentDFA() throws Exception {
+        States states = new States();
+        states.add(new State("q1"));
+        states.add(new State("q2"));
+        states.add(new State("q3"));
+
+
+        Alphabets alphabets = new Alphabets();
+        alphabets.add(new Alphabet("*"));
+        alphabets.add(new Alphabet("a"));
+        alphabets.add(new Alphabet("b"));
+
+        Transitions transitions = new Transitions();
+        transitions.put(new State("q1"), new HashMap<Alphabet, States>(){
+            {put(new Alphabet("*"), new States(){{add(new State("q3"));}});}
+            {put(new Alphabet("b"), new States(){{add(new State("q2"));}});}
+        });
+        transitions.put(new State("q2"), new HashMap<Alphabet, States>(){
+            {put(new Alphabet("a"), new States(){
+                {add(new State("q2"));}
+                {add(new State("q3"));}
+            });}
+            {put(new Alphabet("b"), new States(){{add(new State("q3"));}});}
+        });
+        transitions.put(new State("q3"), new HashMap<Alphabet, States>(){
+            {put(new Alphabet("a"), new States(){{add(new State("q1"));}});}
+        });
+
+        State initialState = new State("q1");
+        States finalStates = new States();
+        finalStates.add(new State("q1"));
+
+        NFA NFA = new NFA(states, alphabets, transitions, initialState, finalStates);
+        DFA convertedDFA = NFA.toDFA();
+
+        assertTrue(convertedDFA.canAccept("a"));
+        assertTrue(convertedDFA.canAccept("aa"));
+        assertTrue(convertedDFA.canAccept("baa"));
+        assertTrue(convertedDFA.canAccept("baba"));
+        assertTrue(convertedDFA.canAccept("baaaaaaaaaaa"));
+        assertTrue(convertedDFA.canAccept("bba"));
+        assertTrue(convertedDFA.canAccept("baaba"));
+        assertTrue(convertedDFA.canAccept(""));
+
+        assertFalse(convertedDFA.canAccept("b"));
+        assertFalse(convertedDFA.canAccept("bb"));
+        assertFalse(convertedDFA.canAccept("bab"));
+        assertFalse(convertedDFA.canAccept("aba"));
+    }
+
     private NFA getOnesAndZerosNfa() {
         States states = new States();
         states.add(new State("q1"));

@@ -1,9 +1,10 @@
 package automata.machine;
 
-import automata.entity.Alphabet;
-import automata.entity.Alphabets;
-import automata.entity.State;
-import automata.entity.States;
+import automata.entity.*;
+import automata.entity.dfa.Transitions;
+
+import java.util.Collection;
+import java.util.HashMap;
 
 public class NFA implements Machine {
     public static final Alphabet EPHSILON = new Alphabet("*");
@@ -81,5 +82,76 @@ public class NFA implements Machine {
         result = 31 * result + (initialState != null ? initialState.hashCode() : 0);
         result = 31 * result + (finalStates != null ? finalStates.hashCode() : 0);
         return result;
+    }
+
+    public DFA toDFA() {
+        HashMap<States, State> allCombinationsOfStates = getAllCombinations(states);
+        States DFAStates = new States();
+        DFAStates.addAll(allCombinationsOfStates.values());
+//        Alphabets DFAAlphabets = this.alphabets.getAllAlphabetsForDFA();
+        Alphabets DFAAlphabets = new Alphabets(){
+            { add(new Alphabet("a"));}
+            { add(new Alphabet("b"));}
+        };
+        Transitions DFATransitions = new Transitions();
+        for (States combination : allCombinationsOfStates.keySet()) {
+            HashMap<Alphabet, State> values = new HashMap<Alphabet, State>();
+            for (Alphabet alphabet : DFAAlphabets) {
+                States transitedStates = new States();
+                for (State state : combination) {
+                    transitedStates.addAll(getEphsilonStates(transitions.transit(state, alphabet)));
+                }
+                values.put(alphabet, allCombinationsOfStates.get(transitedStates));
+            }
+            DFATransitions.put(allCombinationsOfStates.get(combination), values);
+        }
+        State DFAInitialState = allCombinationsOfStates.get(getEphsilonStates(new States(){{ add(initialState);}}));
+        States DFAFinalStates = getFinalStates(allCombinationsOfStates, this.finalStates);
+        return new DFA(DFAStates, DFAAlphabets, DFATransitions, DFAInitialState, DFAFinalStates);
+    }
+
+    private States getFinalStates(HashMap<States, State> allCombinations, States finalStates) {
+        States states = new States();
+        for (State state : finalStates) {
+            for (States combination : allCombinations.keySet()) {
+                if(combination.contains(state)){
+                    states.add(allCombinations.get(combination));
+                }
+            }
+        }
+        return states;
+    }
+
+    private HashMap<States, State> getAllCombinations(States states) {
+        HashMap<States, State> combinations = new HashMap<States, State>();
+
+        combinations.put(new States(){{ add(new State("q1")); }}, new State("q1"));
+        combinations.put(new States(){{ add(new State("q2")); }}, new State("q2"));
+        combinations.put(new States(){{ add(new State("q3")); }}, new State("q3"));
+
+        combinations.put(new States(){
+            { add(new State("q2")); }
+            { add(new State("q3")); }
+        }, new State("q2,q3"));
+
+        combinations.put(new States(){
+            { add(new State("q1")); }
+            { add(new State("q3")); }
+        }, new State("q1,q3"));
+
+        combinations.put(new States(){
+            { add(new State("q1")); }
+            { add(new State("q2")); }
+        }, new State("q1,q2"));
+
+        combinations.put(new States(){
+            { add(new State("q1")); }
+            { add(new State("q2")); }
+            { add(new State("q3")); }
+        }, new State("q1,q2,q3"));
+
+        combinations.put(new States(), new State(""));
+
+        return combinations;
     }
 }
