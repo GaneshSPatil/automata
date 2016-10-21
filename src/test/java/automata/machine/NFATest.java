@@ -75,6 +75,24 @@ public class NFATest {
         assertFalse(convertedDFA.canAccept("aba"));
     }
 
+    @Test
+    public void shouldCreateAnEquivalentDFAForEvenZerosAndOnesNFA() throws Exception {
+        NFA nfa = getEvenOnesOrZerosNFA();
+        assertTrue(nfa.canAccept("11"));
+        assertTrue(nfa.canAccept("00"));
+        assertTrue(nfa.canAccept("1100"));
+        assertTrue(nfa.canAccept("0011"));
+        assertTrue(nfa.canAccept("0000"));
+        assertTrue(nfa.canAccept("1111"));
+        assertTrue(nfa.canAccept("001100"));
+        assertTrue(nfa.canAccept("110011"));
+
+        assertFalse(nfa.canAccept("10"));
+        assertFalse(nfa.canAccept("01"));
+        assertFalse(nfa.canAccept("0101"));
+        assertFalse(nfa.canAccept("1010"));
+    }
+
     private NFA getOnesAndZerosNfa() {
         States states = new States();
         states.add(new State("q1"));
@@ -111,4 +129,58 @@ public class NFATest {
         return new NFA(states, alphabets, transitions, initialState, finalStates);
     }
 
+    public NFA getEvenOnesOrZerosNFA() {
+        States states = new States();
+        states.add(new State("q1"));
+        states.add(new State("q2"));
+        states.add(new State("q3"));
+        states.add(new State("q4"));
+        states.add(new State("q5"));
+        states.add(new State("q6"));
+
+        Alphabets alphabets = new Alphabets();
+        alphabets.add(new Alphabet("*"));
+        alphabets.add(new Alphabet("0"));
+        alphabets.add(new Alphabet("1"));
+
+        Transitions transitions = new Transitions();
+        transitions.put(new State("q1"), new HashMap<Alphabet, States>(){
+            {put(new Alphabet("*"), new States(){
+                {add(new State("q2"));}
+                {add(new State("q3"));}
+            });}
+        });
+        transitions.put(new State("q2"), new HashMap<Alphabet, States>(){
+            {put(new Alphabet("1"), new States(){
+                {add(new State("q4"));}
+            });}
+        });
+        transitions.put(new State("q4"), new HashMap<Alphabet, States>(){
+            {put(new Alphabet("1"), new States(){
+                {add(new State("q6"));}
+            });}
+        });
+        transitions.put(new State("q3"), new HashMap<Alphabet, States>(){
+            {put(new Alphabet("0"), new States(){
+                {add(new State("q5"));}
+            });}
+        });
+        transitions.put(new State("q5"), new HashMap<Alphabet, States>(){
+            {put(new Alphabet("0"), new States(){
+                {add(new State("q6"));}
+            });}
+        });
+        transitions.put(new State("q6"), new HashMap<Alphabet, States>(){
+            {put(new Alphabet("*"), new States(){
+                {add(new State("q1"));}
+            });}
+        });
+
+        State initialState = new State("q1");
+
+        States finalStates = new States();
+        finalStates.add(new State("q6"));
+
+        return new NFA(states, alphabets, transitions, initialState, finalStates);
+    }
 }
