@@ -5,6 +5,9 @@ import automata.entity.dfa.Transitions;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+
+import static combination.foo.combinations;
 
 public class NFA implements Machine {
     public static final Alphabet EPHSILON = new Alphabet("*");
@@ -88,11 +91,7 @@ public class NFA implements Machine {
         HashMap<States, State> allCombinationsOfStates = getAllCombinations(states);
         States DFAStates = new States();
         DFAStates.addAll(allCombinationsOfStates.values());
-//        Alphabets DFAAlphabets = this.alphabets.getAllAlphabetsForDFA();
-        Alphabets DFAAlphabets = new Alphabets(){
-            { add(new Alphabet("a"));}
-            { add(new Alphabet("b"));}
-        };
+        Alphabets DFAAlphabets = this.alphabets.getAllAlphabetsForDFA();
         Transitions DFATransitions = new Transitions();
         for (States combination : allCombinationsOfStates.keySet()) {
             HashMap<Alphabet, State> values = new HashMap<Alphabet, State>();
@@ -123,35 +122,23 @@ public class NFA implements Machine {
     }
 
     private HashMap<States, State> getAllCombinations(States states) {
+        List<States> allCombinations = combinations(states);
         HashMap<States, State> combinations = new HashMap<States, State>();
 
-        combinations.put(new States(){{ add(new State("q1")); }}, new State("q1"));
-        combinations.put(new States(){{ add(new State("q2")); }}, new State("q2"));
-        combinations.put(new States(){{ add(new State("q3")); }}, new State("q3"));
-
-        combinations.put(new States(){
-            { add(new State("q2")); }
-            { add(new State("q3")); }
-        }, new State("q2,q3"));
-
-        combinations.put(new States(){
-            { add(new State("q1")); }
-            { add(new State("q3")); }
-        }, new State("q1,q3"));
-
-        combinations.put(new States(){
-            { add(new State("q1")); }
-            { add(new State("q2")); }
-        }, new State("q1,q2"));
-
-        combinations.put(new States(){
-            { add(new State("q1")); }
-            { add(new State("q2")); }
-            { add(new State("q3")); }
-        }, new State("q1,q2,q3"));
-
         combinations.put(new States(), new State(""));
+        for (States combination : allCombinations) {
+            String newName = getCombinationName(combination);
+            combinations.put(combination, new State(newName));
+        }
 
         return combinations;
+    }
+
+    private String getCombinationName(States combination) {
+        String name = new String();
+        for (State state : combination) {
+            name += state.getName() + ",";
+        }
+        return name.substring(0, name.length() - 1);
     }
 }
