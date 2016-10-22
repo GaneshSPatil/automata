@@ -44,7 +44,7 @@ public class NFA implements Machine {
         return finalStates.containsAnyOf(currentStates);
     }
 
-    private States getEphsilonStates(States currentStates) {
+    States getEphsilonStates(States currentStates) {
         States states = new States();
         for (State state : currentStates) {
             if (hasElpsilonTransition(state)) {
@@ -90,59 +90,6 @@ public class NFA implements Machine {
     }
 
     public DFA toDFA() {
-        HashMap<States, State> allCombinationsOfStates = getAllCombinations(states);
-        States DFAStates = new States();
-        DFAStates.addAll(allCombinationsOfStates.values());
-        Alphabets DFAAlphabets = this.alphabets.getAllAlphabetsForDFA();
-        Transitions DFATransitions = new Transitions();
-        for (States combination : allCombinationsOfStates.keySet()) {
-            HashMap<Alphabet, State> values = new HashMap<Alphabet, State>();
-            for (Alphabet alphabet : DFAAlphabets) {
-                States transitedStates = new States();
-                for (State state : combination) {
-                    transitedStates.addAll(getEphsilonStates(transitions.transit(state, alphabet)));
-                }
-                values.put(alphabet, allCombinationsOfStates.get(transitedStates));
-            }
-            DFATransitions.put(allCombinationsOfStates.get(combination), values);
-        }
-        State DFAInitialState = allCombinationsOfStates.get(getEphsilonStates(new States(){{ add(initialState);}}));
-        States DFAFinalStates = getFinalStates(allCombinationsOfStates, this.finalStates);
-        return new DFA(DFAStates, DFAAlphabets, DFATransitions, DFAInitialState, DFAFinalStates);
-    }
-
-    private States getFinalStates(HashMap<States, State> allCombinations, States finalStates) {
-        States states = new States();
-        for (State state : finalStates) {
-            for (States combination : allCombinations.keySet()) {
-                if(combination.contains(state)){
-                    states.add(allCombinations.get(combination));
-                }
-            }
-        }
-        return states;
-    }
-
-    private HashMap<States, State> getAllCombinations(States states) {
-        List<States> allCombinations = getCombinationsOf(states);
-        HashMap<States, State> combinations = new HashMap<States, State>();
-
-        combinations.put(new States(), new State(""));
-        for (States combination : allCombinations) {
-            String newName = getCombinationName(combination);
-            combinations.put(combination, new State(newName));
-        }
-
-        return combinations;
-    }
-
-
-
-    private String getCombinationName(States combination) {
-        String name = new String();
-        for (State state : combination) {
-            name += state.getName() + ",";
-        }
-        return name.substring(0, name.length() - 1);
+        return NFAToDFAConverter.convert(this, states, initialState, finalStates, alphabets.getAllAlphabetsForDFA(), transitions);
     }
 }
