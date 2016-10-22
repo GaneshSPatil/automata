@@ -1,13 +1,15 @@
 package automata.machine;
 
-import automata.entity.*;
+import automata.entity.Alphabet;
+import automata.entity.Alphabets;
+import automata.entity.State;
+import automata.entity.States;
 import automata.entity.dfa.Transitions;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import static combination.foo.combinations;
+import static combination.CombinationGenerator.getCombinationsOf;
 
 public class NFA implements Machine {
     public static final Alphabet EPHSILON = new Alphabet("*");
@@ -122,7 +124,7 @@ public class NFA implements Machine {
     }
 
     private HashMap<States, State> getAllCombinations(States states) {
-        List<States> allCombinations = combinations(states);
+        List<States> allCombinations = getCombinationsOf(states);
         HashMap<States, State> combinations = new HashMap<States, State>();
 
         combinations.put(new States(), new State(""));
@@ -133,6 +135,8 @@ public class NFA implements Machine {
 
         return combinations;
     }
+
+
 
     private String getCombinationName(States combination) {
         String name = new String();

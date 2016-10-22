@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class foo {
-    public static List<States> combinations(States set){
+public class CombinationGenerator {
+    public static List<States> getCombinationsOf(States set){
         List<States> combs = new ArrayList<States>();
         for (int k = 0; k <= set.size(); k++) {
             List<States> k_combs = k_combinations(set, k);
@@ -57,14 +57,5 @@ public class foo {
             }
         }
         return k_combs;
-    }
-
-    public static void main(String[] args) {
-        States set = new States();
-        set.add(new State("1"));
-        set.add(new State("2"));
-        set.add(new State("3"));
-//        set.add(new State("4"));
-        System.out.println(combinations(set).size());
     }
 }
