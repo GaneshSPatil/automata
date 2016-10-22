@@ -19,7 +19,44 @@ public class NFAToDFAConverter {
         Transitions DFATransitions = getTransitions(nfa, DFAAlphabets, transitions, allCombinationsOfStates);
         State DFAInitialState = allCombinationsOfStates.get(nfa.getEphsilonStates(new States(){{ add(initialState);}}));
         States DFAFinalStates = getFinalStates(allCombinationsOfStates, finalStates);
+        DFAStates = filterUslessStates(DFAStates, DFATransitions, DFAInitialState);
+        DFAFinalStates = filterUslessStates(DFAFinalStates, DFATransitions, DFAInitialState);
+        DFATransitions = filerTransitions(DFATransitions, DFAStates);
         return new DFA(DFAStates, DFAAlphabets, DFATransitions, DFAInitialState, DFAFinalStates);
+    }
+
+    private static Transitions filerTransitions(Transitions dfaTransitions, States DFAStates) {
+        Transitions transitions = new Transitions();
+        for (State state : dfaTransitions.keySet()) {
+            if(DFAStates.contains(state)){
+                transitions.put(state, dfaTransitions.get(state));
+            }
+        }
+        return transitions;
+    }
+
+    private static States filterUslessStates(States dfaStates, Transitions transitions, State initialState) {
+        States states = new States();
+        for (State state : dfaStates) {
+            if(hasIncomingTransition(state, transitions)){
+                states.add(state);
+            }else if(initialState.equals(state)){
+                states.add(state);
+            }
+        }
+        return states;
+    }
+
+    private static boolean hasIncomingTransition(State state, Transitions transitions) {
+        for (State currentState : transitions.keySet()) {
+            HashMap<Alphabet, State> stateTransition = transitions.get(currentState);
+            for (Alphabet alphabet : stateTransition.keySet()) {
+                if(stateTransition.get(alphabet).equals(state) && !currentState.equals(state)){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private static Transitions getTransitions(NFA nfa, Alphabets DFAAlphabets, automata.entity.nfa.Transitions transitions, HashMap<States, State> allCombinationsOfStates) {

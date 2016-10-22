@@ -29,7 +29,6 @@ public class NFAToDFAConverterTest {
         DFA dfa = nfa.toDFA();
 
         States expectedStates = new States();
-        expectedStates.add(new State(""));
         expectedStates.add(new State("q1"));
         States expectedFinalStates = new States();
         expectedFinalStates.add(new State("q1"));
@@ -58,6 +57,11 @@ public class NFAToDFAConverterTest {
                 {add(new State("q2"));}
             });}
         });
+        transitions.put(new State("q2"), new HashMap<Alphabet, States>(){
+            {put(new Alphabet("1"), new States(){
+                {add(new State("q2"));}
+            });}
+        });
 
         State initialState = new State("q1");
         States finalStates = new States();
@@ -68,29 +72,20 @@ public class NFAToDFAConverterTest {
         DFA dfa = nfa.toDFA();
 
         States expectedStates = new States();
-        expectedStates.add(new State(""));
         expectedStates.add(new State("q1"));
         expectedStates.add(new State("q2"));
-        expectedStates.add(new State("q1,q2"));
 
         States expectedFinalStates = new States();
         expectedFinalStates.add(new State("q2"));
-        expectedFinalStates.add(new State("q1,q2"));
 
         Alphabets expectedAlphabets = new Alphabets();
         expectedAlphabets.add(new Alphabet("1"));
 
         automata.entity.dfa.Transitions expectedTransitions = new automata.entity.dfa.Transitions();
-        expectedTransitions.put(new State("q1"), new HashMap<Alphabet, State>(){
+        expectedTransitions.put(new State("q2"), new HashMap<Alphabet, State>(){
             {put(new Alphabet("1"), new State("q2"));}
         });
-        expectedTransitions.put(new State("q2"), new HashMap<Alphabet, State>(){
-            {put(new Alphabet("1"), new State(""));}
-        });
-        expectedTransitions.put(new State(""), new HashMap<Alphabet, State>(){
-            {put(new Alphabet("1"), new State(""));}
-        });
-        expectedTransitions.put(new State("q1,q2"), new HashMap<Alphabet, State>(){
+        expectedTransitions.put(new State("q1"), new HashMap<Alphabet, State>(){
             {put(new Alphabet("1"), new State("q2"));}
         });
         State expectedInitialState = new State("q1");
