@@ -16,7 +16,17 @@ public class NFAToDFAConverter {
         HashMap<States, State> allCombinationsOfStates = getAllCombinations(states);
         States DFAStates = new States();
         DFAStates.addAll(allCombinationsOfStates.values());
+        Transitions DFATransitions = getTransitions(nfa, DFAAlphabets, transitions, allCombinationsOfStates);
+        State DFAInitialState = allCombinationsOfStates.get(nfa.getEphsilonStates(new States(){{ add(initialState);}}));
+        States DFAFinalStates = getFinalStates(allCombinationsOfStates, finalStates);
+        return new DFA(DFAStates, DFAAlphabets, DFATransitions, DFAInitialState, DFAFinalStates);
+    }
+
+    private static Transitions getTransitions(NFA nfa, Alphabets DFAAlphabets, automata.entity.nfa.Transitions transitions, HashMap<States, State> allCombinationsOfStates) {
         Transitions DFATransitions = new Transitions();
+        if(transitions.size() == 0){
+            return DFATransitions;
+        }
         for (States combination : allCombinationsOfStates.keySet()) {
             HashMap<Alphabet, State> values = new HashMap<Alphabet, State>();
             for (Alphabet alphabet : DFAAlphabets) {
@@ -28,9 +38,7 @@ public class NFAToDFAConverter {
             }
             DFATransitions.put(allCombinationsOfStates.get(combination), values);
         }
-        State DFAInitialState = allCombinationsOfStates.get(nfa.getEphsilonStates(new States(){{ add(initialState);}}));
-        States DFAFinalStates = getFinalStates(allCombinationsOfStates, finalStates);
-        return new DFA(DFAStates, DFAAlphabets, DFATransitions, DFAInitialState, DFAFinalStates);
+        return DFATransitions;
     }
 
 
