@@ -9,53 +9,55 @@ import java.util.List;
 
 public class CombinationGenerator {
     public static List<States> getCombinationsOf(States set){
-        List<States> combs = new ArrayList<States>();
-        for (int k = 0; k <= set.size(); k++) {
-            List<States> k_combs = k_combinations(set, k);
-            for (States k_comb : k_combs) {
-                combs.add(k_comb);
+        List<States> allCombinations = new ArrayList<States>();
+        for (int i = 0; i <= set.size(); i++) {
+            List<States> kSizedCombinations = getSizedCombinations(set, i);
+            for (States combination : kSizedCombinations) {
+                allCombinations.add(combination);
             }
         }
-        return combs;
+        return allCombinations;
     }
 
-    private static List<States> k_combinations(final States set, int k) {
-        List<States> k_combs = new ArrayList<States>();
-        if (k > set.size() || k <= 0) {
-            return k_combs;
+    private static List<States> getSizedCombinations(final States allStates, int length) {
+        List<States> kSizedCombs = new ArrayList<States>();
+        if (length > allStates.size() || length <= 0) {
+            return kSizedCombs;
         }
 
-        if (k == set.size()) {
-            k_combs.add(set);
-            return k_combs;
+        if (length == allStates.size()) {
+            kSizedCombs.add(allStates);
+            return kSizedCombs;
         }
 
-        if (k == 1) {
-            for (final State state : set) {
-                k_combs.add(new States(){{add(state);}});
+        if (length == 1) {
+            for (final State state : allStates) {
+                kSizedCombs.add(new States(){{add(state);}});
             }
-            return k_combs;
+            return kSizedCombs;
         }
-        final ArrayList<State> uniqueSet = new ArrayList<State>(set);
-        for (int i = 0; i < new HashSet<State>(uniqueSet).size() - k + 1; i++) {
+        final ArrayList<State> uniqueSetOfStates = new ArrayList<State>(allStates);
+        for (int i = 0; i < new HashSet<State>(uniqueSetOfStates).size() - length + 1; i++) {
             final int finalI = i;
-            States head = new States(){{add(uniqueSet.subList(finalI, finalI + 1).get(0));}};;
+            States head = new States(){
+                {add(uniqueSetOfStates.subList(finalI, finalI + 1).get(0));}
+            };
             States listOfStates = new States();
-            for (State state : uniqueSet.subList(i + 1, set.size())) {
+            for (State state : uniqueSetOfStates.subList(i + 1, allStates.size())) {
                 listOfStates.add(state);
             }
-            List<States> tailcombs = new ArrayList<States>(k_combinations(listOfStates, k - 1));
+            List<States> tailCombs = new ArrayList<States>(getSizedCombinations(listOfStates, length - 1));
 
-            for (int j = 0; j < tailcombs.size(); j++) {
-                head.addAll(new ArrayList<State>(tailcombs.get(j)));
+            for (int j = 0; j < tailCombs.size(); j++) {
+                head.addAll(new ArrayList<State>(tailCombs.get(j)));
                 States states = new States();
                 for (State state : new ArrayList<State>(head)) {
                     states.add(state);
                 }
-                k_combs.add(states);
-                head = new States(){{add(uniqueSet.subList(finalI, finalI + 1).get(0));}};
+                kSizedCombs.add(states);
+                head = new States(){{add(uniqueSetOfStates.subList(finalI, finalI + 1).get(0));}};
             }
         }
-        return k_combs;
+        return kSizedCombs;
     }
 }

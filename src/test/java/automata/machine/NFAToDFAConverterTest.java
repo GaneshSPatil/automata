@@ -179,6 +179,5 @@ public class NFAToDFAConverterTest {
         DFA expectedDFA = new DFA(expectedStates, expectedAlphabets, expectedTransitions, expectedInitialState, expectedFinalStates);
 
         assertThat(dfa, is(expectedDFA));
-
     }
 }
