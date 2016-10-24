@@ -97,20 +97,11 @@ public class NFAToDFAConverter {
 
         combinations.put(new States(), new State(""));
         for (States combination : allCombinations) {
-            String newName = getCombinationName(combination);
+            String newName = combination.getName();
             combinations.put(combination, new State(newName));
         }
 
         return combinations;
     }
-
-
-
-    private static String getCombinationName(States combination) {
-        String name = new String();
-        for (State state : combination) {
-            name += state.getName() + ",";
-        }
-        return name.substring(0, name.length() - 1);
-    }
+    
 }
