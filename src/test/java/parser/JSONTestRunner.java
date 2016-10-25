@@ -12,7 +12,9 @@ import static org.junit.Assert.assertTrue;
 public class JSONTestRunner {
     @Test
     public void runDFATests() throws Exception {
-        HashMap<Machine, HashMap<String, ArrayList<String>>> parsedData = parser.TestDataParser.getMachines("src/main/resources/nfaExamples.json");
+        HashMap<Machine, HashMap<String, ArrayList<String>>> dfaData = parser.TestDataParser.getMachines("src/main/resources/nfaExamples.json");
+        HashMap<Machine, HashMap<String, ArrayList<String>>> parsedData = parser.TestDataParser.getMachines("src/main/resources/dfaExamples.json");
+        dfaData.putAll(dfaData);
 
         for (Machine machine : parsedData.keySet()) {
             for (String inputString : parsedData.get(machine).get("pass")) {

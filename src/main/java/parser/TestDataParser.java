@@ -3,6 +3,7 @@ package parser;
 import automata.generator.DFAGenrator;
 import automata.generator.MachineGenerator;
 import automata.generator.NFAGenerator;
+import automata.generator.NFAToDFAGenerator;
 import automata.machine.Machine;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -19,6 +20,7 @@ public class TestDataParser {
         machineGeneratorMapper = new HashMap<String, MachineGenerator>();
         machineGeneratorMapper.put("dfa", new DFAGenrator());
         machineGeneratorMapper.put("nfa", new NFAGenerator());
+        machineGeneratorMapper.put("nfa-to-dfa", new NFAToDFAGenerator());
     }
 
     public static HashMap<Machine, HashMap<String, ArrayList<String>>> getMachines(String fileName) throws IOException {
@@ -29,9 +31,10 @@ public class TestDataParser {
 
         HashMap<Machine, HashMap<String, ArrayList<String>>> machineInfoMap = new HashMap<Machine, HashMap<String, ArrayList<String>>>();
         for (JSONSkeleton json : parsedJsonArray) {
-            if (json.getType().equals("nfa-to-dfa")) {
+            if(json.getName().equals("(000)* U 1(01)*")){
                 continue;
             }
+            System.out.println(json.getName());
             MachineGenerator generator = machineGeneratorMapper.get(json.getType());
             TupleSkeleton tuple = json.getTuple();
             HashMap<String, HashMap> delta = tuple.getDelta();
