@@ -17,18 +17,28 @@ public class NFAToDFAConverter {
         States DFAStates = new States();
         DFAStates.addAll(allCombinationsOfStates.values());
         Transitions DFATransitions = getTransitions(nfa, DFAAlphabets, transitions, allCombinationsOfStates);
-        State DFAInitialState = allCombinationsOfStates.get(nfa.getEphsilonStates(new States(){{ add(initialState);}}));
+        State DFAInitialState = allCombinationsOfStates.get(nfa.getEphsilonStates(new States() {{add(initialState);}}));
         States DFAFinalStates = getFinalStates(allCombinationsOfStates, finalStates);
         DFAStates = filterUslessStates(DFAStates, DFATransitions, DFAInitialState);
-        DFAFinalStates = filterUslessStates(DFAFinalStates, DFATransitions, DFAInitialState);
-        DFATransitions = filerTransitions(DFATransitions, DFAStates);
+        DFAFinalStates = filterUslessFinalStates(DFAStates, DFAFinalStates);
+        DFATransitions = filterTransitions(DFATransitions, DFAStates);
         return new DFA(DFAStates, DFAAlphabets, DFATransitions, DFAInitialState, DFAFinalStates);
     }
 
-    private static Transitions filerTransitions(Transitions dfaTransitions, States DFAStates) {
+    private static States filterUslessFinalStates(States states, States finalStates) {
+        States DFAFinalStates = new States();
+        for (State state : finalStates) {
+            if(states.contains(state)){
+                DFAFinalStates.add(state);
+            }
+        }
+        return DFAFinalStates;
+    }
+
+    private static Transitions filterTransitions(Transitions dfaTransitions, States DFAStates) {
         Transitions transitions = new Transitions();
         for (State state : dfaTransitions.keySet()) {
-            if(DFAStates.contains(state)){
+            if (DFAStates.contains(state)) {
                 transitions.put(state, dfaTransitions.get(state));
             }
         }
@@ -36,32 +46,42 @@ public class NFAToDFAConverter {
     }
 
     private static States filterUslessStates(States dfaStates, Transitions transitions, State initialState) {
+        HashMap<State, Integer> countMap = getIncomingTransitionCountMap(dfaStates, transitions);
         States states = new States();
         for (State state : dfaStates) {
-            if(hasIncomingTransition(state, transitions)){
+            if (countMap.get(state) != null) {
                 states.add(state);
-            }else if(initialState.equals(state)){
+            } else if (initialState.equals(state)) {
                 states.add(state);
             }
         }
         return states;
     }
 
-    private static boolean hasIncomingTransition(State state, Transitions transitions) {
-        for (State currentState : transitions.keySet()) {
-            HashMap<Alphabet, State> stateTransition = transitions.get(currentState);
-            for (Alphabet alphabet : stateTransition.keySet()) {
-                if(stateTransition.get(alphabet).equals(state) && !currentState.equals(state)){
-                    return true;
+    public static HashMap<State, Integer> getIncomingTransitionCountMap(States dfaStates, Transitions transitions) {
+        HashMap<State, Integer> countMap = new HashMap<State, Integer>();
+        if(transitions.size() == 0)
+            return countMap;
+        for (State state : dfaStates) {
+            HashMap<Alphabet, State> transitionMap = transitions.get(state);
+            for (State transitedState : transitionMap.values()) {
+                if(transitedState.equals(state)){
+                    continue;
+                }
+                Integer count = countMap.get(transitedState);
+                if (count == null) {
+                    countMap.put(transitedState, 1);
+                } else {
+                    countMap.put(transitedState, count++);
                 }
             }
         }
-        return false;
+        return countMap;
     }
 
     private static Transitions getTransitions(NFA nfa, Alphabets DFAAlphabets, automata.entity.nfa.Transitions transitions, HashMap<States, State> allCombinationsOfStates) {
         Transitions DFATransitions = new Transitions();
-        if(transitions.size() == 0){
+        if (transitions.size() == 0) {
             return DFATransitions;
         }
         for (States combination : allCombinationsOfStates.keySet()) {
@@ -81,11 +101,9 @@ public class NFAToDFAConverter {
 
     private static States getFinalStates(HashMap<States, State> allCombinations, States finalStates) {
         States states = new States();
-        for (State state : finalStates) {
-            for (States combination : allCombinations.keySet()) {
-                if(combination.contains(state)){
-                    states.add(allCombinations.get(combination));
-                }
+        for (States combination : allCombinations.keySet()) {
+            if (combination.containsAnyOf(finalStates)) {
+                states.add(allCombinations.get(combination));
             }
         }
         return states;
@@ -103,5 +121,4 @@ public class NFAToDFAConverter {
 
         return combinations;
     }
-    
 }

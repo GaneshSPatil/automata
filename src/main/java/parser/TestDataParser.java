@@ -25,16 +25,11 @@ public class TestDataParser {
 
     public static HashMap<Machine, HashMap<String, ArrayList<String>>> getMachines(String fileName) throws IOException {
         String jsonContent = parser.FileReader.read(fileName);
-        Type type = new TypeToken<ArrayList<JSONSkeleton>>() {
-        }.getType();
+        Type type = new TypeToken<ArrayList<JSONSkeleton>>() {}.getType();
         ArrayList<JSONSkeleton> parsedJsonArray = new Gson().fromJson(jsonContent, type);
 
         HashMap<Machine, HashMap<String, ArrayList<String>>> machineInfoMap = new HashMap<Machine, HashMap<String, ArrayList<String>>>();
         for (JSONSkeleton json : parsedJsonArray) {
-            if(json.getName().equals("(000)* U 1(01)*")){
-                continue;
-            }
-            System.out.println(json.getName());
             MachineGenerator generator = machineGeneratorMapper.get(json.getType());
             TupleSkeleton tuple = json.getTuple();
             HashMap<String, HashMap> delta = tuple.getDelta();
