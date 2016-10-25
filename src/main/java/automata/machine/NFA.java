@@ -30,16 +30,15 @@ public class NFA implements Machine {
     public boolean canAccept(String inputString) {
         States currentStates = new States();
         currentStates.add(initialState);
-
+        currentStates = getEphsilonStates(currentStates);
         Alphabets alphabets = Alphabets.fromString(inputString);
 
         for (Alphabet alphabet : alphabets) {
-            currentStates = getEphsilonStates(currentStates);
             States bufferedStates = new States();
             for (State state : currentStates) {
                 bufferedStates.addAll(transitions.transit(state, alphabet));
             }
-            currentStates = bufferedStates;
+            currentStates = getEphsilonStates(bufferedStates);
         }
         return finalStates.containsAnyOf(currentStates);
     }

@@ -4,7 +4,7 @@ import automata.entity.State;
 import automata.entity.States;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CombinationGenerator {
@@ -37,7 +37,7 @@ public class CombinationGenerator {
             return kSizedCombs;
         }
         final ArrayList<State> uniqueSetOfStates = new ArrayList<State>(allStates);
-        for (int i = 0; i < new HashSet<State>(uniqueSetOfStates).size() - length + 1; i++) {
+        for (int i = 0; i < new ArrayList<State>(uniqueSetOfStates).size() - length + 1; i++) {
             final int finalI = i;
             States head = new States(){
                 {add(uniqueSetOfStates.subList(finalI, finalI + 1).get(0));}

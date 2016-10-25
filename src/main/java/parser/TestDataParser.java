@@ -14,7 +14,8 @@ import java.util.HashMap;
 
 public class TestDataParser {
     private static HashMap<String, MachineGenerator> machineGeneratorMapper;
-    static{
+
+    static {
         machineGeneratorMapper = new HashMap<String, MachineGenerator>();
         machineGeneratorMapper.put("dfa", new DFAGenrator());
         machineGeneratorMapper.put("nfa", new NFAGenerator());
@@ -22,11 +23,15 @@ public class TestDataParser {
 
     public static HashMap<Machine, HashMap<String, ArrayList<String>>> getMachines(String fileName) throws IOException {
         String jsonContent = parser.FileReader.read(fileName);
-        Type type = new TypeToken<ArrayList<JSONSkeleton>>() {}.getType();
+        Type type = new TypeToken<ArrayList<JSONSkeleton>>() {
+        }.getType();
         ArrayList<JSONSkeleton> parsedJsonArray = new Gson().fromJson(jsonContent, type);
 
         HashMap<Machine, HashMap<String, ArrayList<String>>> machineInfoMap = new HashMap<Machine, HashMap<String, ArrayList<String>>>();
         for (JSONSkeleton json : parsedJsonArray) {
+            if (json.getType().equals("nfa-to-dfa")) {
+                continue;
+            }
             MachineGenerator generator = machineGeneratorMapper.get(json.getType());
             TupleSkeleton tuple = json.getTuple();
             HashMap<String, HashMap> delta = tuple.getDelta();

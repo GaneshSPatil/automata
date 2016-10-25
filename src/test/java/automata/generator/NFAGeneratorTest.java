@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -32,16 +32,16 @@ public class NFAGeneratorTest {
         alphabets.add("1");
 
         HashMap<String, HashMap> delta = new HashMap<String, HashMap>();
-        delta.put("q1", new HashMap<String, HashSet<String>>(){{
-            put("*", new HashSet<String>(){{
+        delta.put("q1", new HashMap<String, ArrayList<String>>(){{
+            put("*", new ArrayList<String>(){{
                 add("q2");
                 add("q3");
             }});
         }});
-        delta.put("q2", new HashMap<String, HashSet<String>>(){{put("0", new HashSet<String>(){{add("q4");}});}});
-        delta.put("q3", new HashMap<String, HashSet<String>>(){{put("1", new HashSet<String>(){{add("q5");}});}});
-        delta.put("q4", new HashMap<String, HashSet<String>>(){{put("0", new HashSet<String>(){{add("q4");}});}});
-        delta.put("q5", new HashMap<String, HashSet<String>>(){{put("1", new HashSet<String>(){{add("q5");}});}});
+        delta.put("q2", new HashMap<String, ArrayList<String>>(){{put("0", new ArrayList<String>(){{add("q4");}});}});
+        delta.put("q3", new HashMap<String, ArrayList<String>>(){{put("1", new ArrayList<String>(){{add("q5");}});}});
+        delta.put("q4", new HashMap<String, ArrayList<String>>(){{put("0", new ArrayList<String>(){{add("q4");}});}});
+        delta.put("q5", new HashMap<String, ArrayList<String>>(){{put("1", new ArrayList<String>(){{add("q5");}});}});
 
         String startState = "q1";
 

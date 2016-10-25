@@ -7,7 +7,7 @@ import automata.machine.NFA;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 public class NFAGenerator extends GenerationHelper implements MachineGenerator {
     public NFAGenerator() {
@@ -26,7 +26,7 @@ public class NFAGenerator extends GenerationHelper implements MachineGenerator {
     private Transitions getTransitions(HashMap<String, HashMap> delta) {
         Transitions transitions = new Transitions();
         for (String state : delta.keySet()) {
-            HashMap<String, HashSet<String>> values = delta.get(state);
+            HashMap<String, ArrayList<String>> values = delta.get(state);
             HashMap<Alphabet, States> transitInfo = new HashMap<Alphabet, States>();
             for (String alphabet : values.keySet()) {
                 States transitedStates = new States();

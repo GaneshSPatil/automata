@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -25,19 +25,19 @@ public class NFAIntegrationTest {
         alphabets.add("b");
 
         HashMap<String, HashMap> delta = new HashMap<String, HashMap>();
-        delta.put("q1", new HashMap<String, HashSet<String>>(){
-            {put("*", new HashSet<String>(){{ add("q3");}});}
-            {put("b", new HashSet<String>(){{ add("q2");}});}
+        delta.put("q1", new HashMap<String, ArrayList<String>>(){
+            {put("*", new ArrayList<String>(){{ add("q3");}});}
+            {put("b", new ArrayList<String>(){{ add("q2");}});}
         });
-        delta.put("q2", new HashMap<String, HashSet<String>>(){
-            {put("a", new HashSet<String>(){
+        delta.put("q2", new HashMap<String, ArrayList<String>>(){
+            {put("a", new ArrayList<String>(){
                 { add("q2");}
                 { add("q3");}
             });}
-            {put("b", new HashSet<String>(){{ add("q3");}});}
+            {put("b", new ArrayList<String>(){{ add("q3");}});}
         });
-        delta.put("q3", new HashMap<String, HashSet<String>>(){
-            {put("a", new HashSet<String>(){{ add("q1");}});}
+        delta.put("q3", new HashMap<String, ArrayList<String>>(){
+            {put("a", new ArrayList<String>(){{ add("q1");}});}
         });
 
         String startState = "q1";
